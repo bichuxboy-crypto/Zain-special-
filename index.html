@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Happy Birthday — A Little World For You</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;font-family:Georgia,serif;background:#08070c;touch-action:none}
+button{border:0;font:inherit;cursor:pointer;background:none;touch-action:manipulation}
+.scene{position:absolute;inset:0;display:none;overflow:hidden;width:100%;height:100%}
+.scene.on{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+.btn{padding:13px 30px;border-radius:999px;background:#d9578c;color:#fff;box-shadow:0 8px 28px #d9578c45;font:600 14px system-ui;position:relative;z-index:20;min-height:46px}
+.btn:active{transform:scale(.94)}
+.caption{text-align:center;width:92%;font-size:clamp(20px,3.2vw,42px);font-weight:bold;color:#704456;z-index:5;line-height:1.3}
+.sub{font:13px/1.4 system-ui;color:#96687d;margin-top:6px}
+.rise{animation:rise .9s cubic-bezier(.2,.9,.2,1) both}
+.sway{animation:sway 3s ease-in-out infinite}
+@keyframes rise{from{opacity:0;transform:translateY(40%) scale(.92)}to{opacity:1;transform:none}}
+@keyframes sway{0%,100%{rotate:-2deg}50%{rotate:2deg}}
+
+#s1{background:linear-gradient(135deg,#f5dbe5,#fff7fa);flex-direction:row;gap:clamp(20px,4vw,60px)}
+.photoFrame{width:min(380px,38vw);min-width:200px;aspect-ratio:4/5;background:#fff;padding:16px 16px 52px;rotate:-4deg;box-shadow:0 16px 48px #77485a35;position:relative}
+/* 🎀 ribbon on photo frame only */
+.photoFrame::after{
+    content:"🎀";
+    position:absolute;
+    top:-4px;
+    left:-4px;
+    font-size:36px;
+    z-index:15;
+    filter:drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+    pointer-events:none;
+    line-height:1;
+}
+.photoArt{width:100%;height:100%;background:linear-gradient(145deg,#f8bdd2,#cda1c0);border-radius:6px;overflow:hidden}
+.photoArt img{width:100%;height:100%;object-fit:cover}
+.photoFrame b{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#5e4651;font-size:14px}
+.pin{text-align:center;min-width:200px;max-width:380px;width:100%}
+.pin h1{font-size:clamp(24px,3vw,40px);margin-bottom:16px;color:#4e3542}
+.dots{display:flex;justify-content:center;gap:12px;margin-bottom:18px}
+.dots i{width:34px;height:34px;border-radius:8px;background:#fff8;border:2px solid #fff}
+.dots i.on{background:#fff;border-color:#d9578c}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:270px;margin:auto}
+.keys button{aspect-ratio:1;border-radius:50%;background:#ffffff88;color:#654455;font:600 20px system-ui;min-height:52px}
+.error{height:22px;color:#b93d70;font:600 13px system-ui;margin-top:10px}
+
+#s2{background:radial-gradient(circle at 50% 45%,#fff9fc,#fce7f0 42%,#efbfd2);gap:4px;overflow:hidden}
+.flower-title{color:#7b405a;font-size:clamp(28px,4.5vw,52px);font-weight:bold;text-align:center;z-index:5;text-shadow:0 2px 20px #fff}
+.flower-stage{flex:1;position:relative;width:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.flower-burst{position:absolute;inset:-10%;width:120%;height:120%;pointer-events:none}
+.burst-flower{position:absolute;left:50%;top:50%;width:38px;height:38px;transform:translate(-50%,-50%) scale(.05);opacity:0;will-change:transform,opacity}
+.burst-flower span{position:absolute;left:50%;top:50%;width:15px;height:24px;margin:-12px 0 0 -7.5px;border-radius:100% 5% 100% 5%;background:linear-gradient(145deg,#ffd9e8,#ed7fac)}
+.burst-flower span:nth-child(1){transform:rotate(0) translateY(-5px)}.burst-flower span:nth-child(2){transform:rotate(60deg) translateY(-5px)}.burst-flower span:nth-child(3){transform:rotate(120deg) translateY(-5px)}.burst-flower span:nth-child(4){transform:rotate(180deg) translateY(-5px)}.burst-flower span:nth-child(5){transform:rotate(240deg) translateY(-5px)}.burst-flower span:nth-child(6){transform:rotate(300deg) translateY(-5px)}
+.burst-flower b{position:absolute;left:50%;top:50%;width:10px;height:10px;transform:translate(-50%,-50%);border-radius:50%;background:#ffd36b}
+.burst-emoji{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.05);opacity:0;display:flex;align-items:center;justify-content:center;line-height:1;will-change:transform,opacity}
+.burst-flower,.burst-emoji{animation:flowerFly 2.2s cubic-bezier(.12,.72,.2,1) forwards, float 3.5s ease-in-out infinite alternate;animation-delay:0s,2.2s}
+@keyframes flowerFly{0%{opacity:0;transform:translate(-50%,-50%) scale(.05)}14%{opacity:1}100%{opacity:.92;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(var(--s)) rotate(var(--r))}}
+@keyframes float{0%{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(var(--s)) rotate(var(--r)) translateY(0px) translateX(0px)}25%{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(var(--s)) rotate(var(--r)) translateY(calc(var(--fy)*-8px)) translateX(calc(var(--fx)*6px))}50%{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(var(--s)) rotate(var(--r)) translateY(calc(var(--fy)*10px)) translateX(calc(var(--fx)*-8px))}75%{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(var(--s)) rotate(var(--r)) translateY(calc(var(--fy)*-6px)) translateX(calc(var(--fx)*10px))}100%{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(var(--s)) rotate(var(--r)) translateY(calc(var(--fy)*4px)) translateX(calc(var(--fx)*-5px))}}
+.flower-core{position:relative;width:clamp(120px,22vw,160px);height:clamp(120px,22vw,160px);animation:coreBloom 1.5s .15s both;z-index:2}
+.core-petal{position:absolute;left:50%;top:50%;width:40%;height:62%;margin:-31% 0 0 -20%;border-radius:100% 12% 100% 12%;background:linear-gradient(145deg,#ffe0ec,#e982ae);transform-origin:50% 100%}
+.cp1{transform:rotate(0) translateY(-4%)}.cp2{transform:rotate(60deg) translateY(-4%)}.cp3{transform:rotate(120deg) translateY(-4%)}.cp4{transform:rotate(180deg) translateY(-4%)}.cp5{transform:rotate(240deg) translateY(-4%)}.cp6{transform:rotate(300deg) translateY(-4%)}
+.core-center{position:absolute;left:50%;top:50%;width:32%;height:32%;transform:translate(-50%,-50%);border-radius:50%;background:#ffd06a;box-shadow:0 0 0 8px #ffd06a44}
+@keyframes coreBloom{0%{opacity:0;scale:.05;rotate:-30deg}55%{opacity:1;scale:1.1;rotate:6deg}100%{scale:1;rotate:0}}
+
+#s3,#s9{background:#f4dfe7;gap:8px}
+.character{width:min(40vw,420px);max-height:65vh;object-fit:contain}
+.caption{position:relative}
+
+#s4{background:radial-gradient(circle,#fff 0 10%,#f7c8dc 28%,#0c0810 72%);gap:12px}
+.wipe{position:absolute;inset:0;background:radial-gradient(circle,#fff 0 8%,transparent 9%);animation:wipe 1.7s ease both}@keyframes wipe{0%{scale:.05}70%{scale:4}100%{scale:20}}#s4 .caption{color:#fff}
+
+#s5{background:#fff0f5;gap:4px}
+.cake-wrap{flex:1;position:relative;display:flex;align-items:center;justify-content:center;width:100%;max-height:68vh}
+.cake-img{width:min(50vw,560px);max-height:60vh;object-fit:contain}
+.slice-line{position:absolute;width:5px;height:54%;left:50%;top:23%;background:#fff;box-shadow:0 0 16px #fff,0 0 30px #ffb6c180;opacity:0;z-index:2;border-radius:4px}
+.slice-line.cut{opacity:1;animation:slash .5s both}@keyframes slash{from{transform:translateX(-160px) rotate(-18deg)}to{transform:translateX(160px) rotate(18deg)}}
+#cakeZone{position:absolute;inset:8% 6% 12%;z-index:3;touch-action:none}
+.hint{position:absolute;bottom:4%;left:50%;transform:translateX(-50%);background:#fff9;padding:10px 20px;border-radius:99px;font:600 13px system-ui;color:#5e3e4e;z-index:4}
+
+#s6{background:linear-gradient(160deg,#fff0f5,#f7cadb);gap:12px}
+.birthday{text-align:center}.birthday h1{font-size:clamp(36px,7vw,76px);color:#8b3c60}.birthday p{font-size:clamp(18px,2.2vw,26px);color:#9e647c;margin-top:8px}
+
+#s7{background:#f6e6ec;gap:6px}
+.env{width:min(60vw,580px);max-height:62vh;object-fit:contain;animation:envFloat 3s ease-in-out infinite;cursor:pointer}
+@keyframes envFloat{50%{transform:translateY(-5%)}}
+
+#s8{background:#ead9df;gap:12px}
+.paper{width:min(680px,88vw);height:min(68vh,520px);background:#fffdfa;border-radius:8px;padding:28px 40px;box-shadow:0 28px 72px #593d4728;display:flex;flex-direction:column;overflow:hidden}
+.paper h2{text-align:center;color:#793b5c}
+.paper small{display:block;text-align:center;color:#bd8fa4;margin:4px 0 16px}
+.scroll{flex:1;overflow:auto;padding-right:16px;font:15px/1.8 system-ui;color:#453d42;white-space:pre-wrap;word-break:break-word}
+.scroll p{margin-bottom:16px}
+
+#s10{background:radial-gradient(circle at 50% 50%,#17152d 0%,#090817 32%,#020207 72%,#000 100%);position:absolute;inset:0;overflow:hidden;padding:0;perspective:1200px}
+#s10:before{content:"";position:absolute;inset:-30%;background:radial-gradient(circle at 50% 50%,transparent 0 15%,#8d5cff12 16%,transparent 35%);opacity:.7;animation:galaxyDrift 18s linear infinite;pointer-events:none}
+#s10:after{content:"";position:absolute;width:70vw;height:70vw;max-width:800px;max-height:800px;border-radius:50%;background:radial-gradient(circle,#ffffff18,#d98cff12 18%,#7040ff0b 40%,transparent 70%);filter:blur(18px);left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
+@keyframes galaxyDrift{to{transform:rotate(360deg) scale(1.08)}}
+.stars{position:absolute;inset:0;background-image:radial-gradient(circle,#fff 1px,transparent 1.5px),radial-gradient(circle,#fff 1px,transparent 1.5px),radial-gradient(circle,#fff 1px,transparent 1.5px);background-size:73px 73px,113px 113px,181px 181px;background-position:0 0,31px 47px,77px 19px;opacity:.8;animation:starMove 12s linear infinite;pointer-events:none}
+@keyframes starMove{to{background-position:73px 73px,144px 160px,-104px 181px}}
+.tip{position:absolute;top:5%;left:50%;transform:translateX(-50%);color:#fff;opacity:.8;font:13px system-ui;z-index:30;text-align:center;width:94%;text-shadow:0 2px 15px #000}
+.world{position:absolute;inset:0;perspective:1200px;touch-action:none;display:flex;align-items:center;justify-content:center;z-index:5}
+.orbit{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
+.mcard{position:absolute;left:50%;top:50%;width:clamp(92px,17vw,155px);height:clamp(125px,24vw,205px);padding:7px 7px 25px;background:linear-gradient(145deg,#24232d,#111116);border:1px solid #ffffff18;border-radius:9px;box-shadow:0 20px 55px #000000aa,0 0 25px #b06cff12;transform-style:preserve-3d;cursor:pointer;display:flex;flex-direction:column;align-items:center;opacity:0;animation:cardAppear .8s cubic-bezier(.2,.8,.2,1) forwards}
+.mcard img{width:100%;height:100%;object-fit:cover;border-radius:6px}
+.mcard span{position:absolute;bottom:5px;color:#fff;font:600 10px system-ui;text-shadow:0 2px 8px #000}
+@keyframes cardAppear{from{opacity:0;scale:.55}to{opacity:1;scale:1}}
+.modal{position:absolute;inset:0;background:#000d;display:none;align-items:center;justify-content:center;backdrop-filter:blur(12px);z-index:100;padding:20px}.modal.show{display:flex}
+.detail{width:min(420px,88vw);background:#18171d;color:#fff;padding:14px;border-radius:12px;border:1px solid #ffffff18;max-height:90vh;overflow:auto;box-shadow:0 30px 100px #000}
+.detail img{width:100%;border-radius:8px}.detail h3{text-align:center;font:600 17px system-ui;margin:12px 0 14px}.detail button{width:100%;padding:12px;border-radius:8px;background:#ffffff14;color:#fff;font:600 14px system-ui}
+
+#s11{background:#08070c;gap:12px}
+.finalPhoto{width:min(48vw,460px);max-height:62vh;border-radius:10px;object-fit:contain}
+#s11 .caption{color:#fff}
+
+#s12{background:#08070c;color:#fff;text-align:center;gap:16px}.outro h1{font:700 clamp(36px,7vw,72px) Georgia}.handle{font:600 16px system-ui;margin-top:16px;color:#ddd}
+
+@media(max-width:768px){
+#s1{flex-direction:column;gap:14px}
+.photoFrame{width:min(280px,60vw);padding:12px 12px 44px}
+.photoFrame::after{font-size:30px;top:-2px;left:-2px}
+.pin{max-width:300px}.keys{max-width:220px}.keys button{font-size:17px;min-height:46px}
+.dots i{width:28px;height:28px}.flower-core{scale:.78}
+.character{width:min(60vw,300px);max-height:52vh}
+.cake-img{width:78vw;max-height:50vh}
+.paper{padding:18px 20px;height:min(74vh,440px)}
+.env{width:72vw;max-height:50vh}
+.tip{top:3.5%;font-size:11px}
+.mcard{width:clamp(76px,22vw,112px);height:clamp(104px,31vw,150px);padding:5px 5px 19px}
+.mcard span{font-size:9px}
+.finalPhoto{width:68vw;max-height:52vh}
+}
+@media(max-width:480px){
+.photoFrame{width:min(220px,72vw);padding:10px 10px 36px}
+.photoFrame::after{font-size:26px;top:-1px;left:-1px}
+.pin h1{font-size:18px}
+.keys{max-width:170px;gap:8px}
+.keys button{font-size:15px;min-height:40px}
+.dots i{width:24px;height:24px}
+.paper{padding:14px 12px;height:min(76vh,380px)}
+.scroll{font-size:13px;line-height:1.6}
+.flower-core{scale:.62}
+.character{width:72vw;max-height:46vh}
+.cake-img{width:88vw;max-height:42vh}
+.env{width:80vw;max-height:44vh}
+.tip{font-size:10px}
+.mcard{width:clamp(68px,23vw,92px);height:clamp(92px,34vw,125px);padding:4px 4px 17px}
+.mcard span{font-size:8px}
+.finalPhoto{width:78vw;max-height:46vh}
+}
+</style>
+</head>
+<body>
+<main id="app">
+<section class="scene on" id="s1">
+<div class="photoFrame"><div class="photoArt"><img src="assets/photo.png" alt="Your photo"></div><b>For my favorite person</b></div>
+<div class="pin"><h1>Enter Passcode</h1><div class="dots" id="dots"><i></i><i></i><i></i><i></i></div><div class="keys">
+<button>1</button><button>2</button><button>3</button><button>4</button><button>5</button><button>6</button><button>7</button><button>8</button><button>9</button><button>*</button><button>0</button><button>⌫</button>
+</div><div class="error" id="err"></div></div>
+</section>
+
+<section class="scene" id="s2"><div class="flower-title">For You ♡</div><div class="flower-stage"><div class="flower-burst" id="flowerBurst"></div><div class="flower-core">
+<div class="core-petal cp1"></div><div class="core-petal cp2"></div><div class="core-petal cp3"></div><div class="core-petal cp4"></div><div class="core-petal cp5"></div><div class="core-petal cp6"></div><div class="core-center"></div>
+</div></div><button class="btn" data-go="s3">Continue ✨</button></section>
+
+<section class="scene" id="s3"><img class="character sway rise" src="assets/character.png" alt="Character"><div class="caption">Someone special is waiting…</div><button class="btn" data-go="s4">Continue</button></section>
+
+<section class="scene" id="s4"><div class="wipe"></div><div class="caption">✨ A surprise is coming ✨</div><button class="btn" data-go="s5">Continue</button></section>
+
+<section class="scene" id="s5"><div class="caption">Swipe to Cut the Cake! 🎂<div class="sub">make one big swipe across the cake</div></div><div class="cake-wrap"><img class="cake-img" src="assets/cake.png" alt="Cake"><div class="slice-line" id="slash"></div><div id="cakeZone"></div><div class="hint" id="cakeHint">Swipe / drag anywhere on the cake</div></div></section>
+
+<section class="scene" id="s6"><div class="birthday"><h1>Happy Birthday, My Girl 💗</h1><p>Today is all about you.</p></div><button class="btn" data-go="s7">Next 💕</button></section>
+
+<section class="scene" id="s7"><div class="caption">A Letter, Just For You<div class="sub">tap the envelope</div></div><img class="env" id="env" src="assets/letter.png" alt="Birthday Letter" onerror="this.onerror=null;this.src='assets/envelope.png'"></section>
+
+<section class="scene" id="s8"><div class="paper"><h2>𝐇𝐀𝐏𝐏𝐘 𝐁𝐈𝐑𝐓𝐇𝐃𝐀𝐘 𝐙𝐀𝐍𝐈 🌸</h2><small>Turning 18 on 09 September 🎉</small><div class="scroll">
+<p>𝐙𝐀𝐍𝐈 🥹🎀 — 𝐇𝐀𝐏𝐏𝐘 𝐁𝐈𝐑𝐓𝐇𝐃𝐀𝐘 🫵🏻💍🎂🌸</p>
+<p>Turning 18 on 09 September 🎉<br>In The Story Of My Life, 🅩︎ᵃⁿⁱ ᵃʳᵉ ᵀʰᵉ ᴹᵒˢᵗ ᴮᵉᵃᵘᵗⁱᶠᵘˡ ᑕʰᵃᵖᵗᵉʳ......♡🥹🎀🫀</p>
+<p>𝐙𝐀𝐍𝐈 𝐀ʀ𝐞 𝐍ᴏᴛ 𝐉ᴜ𝐬ᴛ 𝐌ʏ 𝐁ᴇ𝐬ᴛɪᴇ,<br>🅩︎ᵃⁿⁱ ᵃʳᵉ ᴹʸ ᴶᵃⁿᵘ, ᴹʸ ᴰᵃʳˡⁱⁿᵍ, ᴹʸ ᶠᵃᵛᵒʳⁱᵗᵉ ᴾᵉʳˢᵒⁿ......♡🌷🤍</p>
+<p>_تیــۤــࣱࣶـری 18ویں سالگــۧۛـ𝆊۬ــرہ 9 ستمبــر کا ہـﹻ۬ﹻۧ۬ﹻٰ۬ﹻٰ۬ﹻۧ۬ﹻ۬ﹻـر دن میــٖٜ۬ـٰٜ۬ـٖٜ۬ری روح میــــٓ٘͜ـں روشنی لے آتـا ہـے زانیــ۬ـٰ۬ـ۬ـے ســٖٜ۬ـٰٜ۬ـٖٜ۬وچنا، زانیـــْْْــؔـؔــْـــے کے لیــے دعــا کرنا، میـؚ݊ـؚ݊ـؚ݊ـؚ݊ـ݊ـؚ݊ـؚ݊ـؚ݊ـری عــــٓ٘͜ـادت بن گیــۤــࣱࣶـا_🔗💗🫀🌸🫶</p>
+<p>_♡•𝐙𝐀𝐍𝐈 𝐓𝐮𝐦 𝐉𝐚𝐢𝐬𝐚 𝐊𝐨𝐢 𝐍𝐚𝐡𝐢 𝐇𝐨 𝐒𝐚𝐤𝐭𝐚 𝐓𝐮𝐦 𝐌𝐞𝐫𝐢 𝐃𝐮𝐧𝐢𝐲𝐚 𝐇𝐨• 🌈❤️🫂_</p>
+<p>𝙕𝙖𝙣𝙞 𝙢𝙚𝙧𝙞 𝙟𝙖𝙬𝙣.......♥︎ᰔ♥︎💍😘♥️<br>𝙕𝙖𝙣𝙞 𝙢𝙚𝙧𝙞 𝙯𝙞𝙣𝙙𝙖𝙜𝙞......♥︎ᰔ♥︎💍💗<br>𝙕𝙖𝙣𝙞 𝙢𝙚𝙧𝙖 𝙨𝙪𝙠𝙤𝙤𝙣 .......♥︎ᰔ♥︎💍♥️<br>𝙕𝙖𝙣𝙞 𝙢𝙚𝙧𝙞 𝚌𝚑𝚊𝚒𝚗........♥︎ᰔ♥︎💗💍<br>𝙕𝙖𝙣𝙞 𝙢𝙚𝙧𝙞 𝚌𝚑𝚊𝚑𝚊𝚝 ......♥︎ᰔ♥︎♥️💍<br>𝙕𝙖𝙣𝙞 𝙢𝙎𝚛𝚊 𝚒𝚜𝚑𝚚 .....♥︎ᰔ♥︎💗💍<br>𝙕𝙖𝙣𝙞 𝙢𝙚𝙧𝙞 𝙠𝙖𝙞𝙣𝙖𝙩 .....♥︎ᰔ♥︎♥️💍<br>𝙕𝙖𝙣𝙞 𝙢𝙚𝙧𝙞 𝙧𝙖𝙝𝙖𝙩 ..........♥︎ᰔ♥︎💗💍<br>𝙕𝙖𝙣𝙞 𝙢𝙚𝙧𝙞 𝙢𝙪𝙨𝙠𝙪𝙧𝙖𝙝𝙖𝙩 .......♥︎ᰔ♥︎💗💍</p>
+<p>𝘼𝙥 𝙠𝙚 𝙗𝙞𝙣𝙖 𝙢𝙚 𝙖𝙙𝙝𝙪𝙧𝙖 𝙕𝘼𝙉𝙄 ᰔ♥︎🌸🥹💍🫂🌎❤️🙈🫶🏻</p>
+<p style="text-align:center">▀██▀─▄███▄─▀██─██▀██▀▀█<br>─██─███─███─██─██─██▄█<br>─██─▀██▄██▀─▀█▄█▀─██▀█<br>▄██▄▄█▀▀▀─────▀──▄██▄▄█</p>
+<p>_𐒄ᎯᏒᎥ ᎫᎪΝ 𝐙𝐀𝐍𝐈 𝐇𝐀𝐏𝐏𝐘 18𝐭𝐡 𝐁𝐈𝐑𝐓𝐇𝐃𝐀𝐘 𝐓𝐎 𝐘𝐎𝐔 🎂_</p>
+<p>_𝙼𝚎𝚛𝚒 𝚣𝚒𝚗𝚍𝚊𝚐𝚒 𝚔𝚊 𝚀𝚒𝚖𝚝𝚎 𝚎𝚑𝚜𝚊𝚜 𝚑𝚘 𝚉𝙰𝙽𝙸 𝚝𝚞𝚖 𝚑𝚘 𝙸 𝚕𝚘𝚟𝚎 ❤ 𝙼𝚎𝚛𝚊 𝚜𝚞𝚔𝚘𝚗 𝚑𝚘 𝙼𝚎𝚛𝚒 𝚜𝚑𝚎𝚑𝚣𝚊𝚍𝚒 𝚉𝙰𝙽𝙸 𝚊𝚓 9 𝚂𝚎𝚙𝚝𝚎𝚖𝚋𝚎𝚛 𝚝𝚞𝚖 18 𝚜𝚊𝚕 𝚔𝚒 𝚑𝚘 𝚐𝚊𝚒 𝚑𝚘 𝚊𝚞𝚛 𝚖𝚎 𝚌𝚑𝚊𝚑𝚝𝚊 𝚑𝚞 𝚝𝚞𝚖𝚑𝚊𝚛𝚎 𝚑𝚊𝚛 𝚍𝚒𝚗 𝚖𝚎 𝚔𝚑𝚞𝚜𝚑𝚒𝚢𝚊𝚗 𝚑𝚘𝚗🥺🤌🏻🫀⃟ 𝙰𝚕𝚕𝚊𝚑 𝚝𝚞𝚖𝚑𝚎 𝚑𝚊𝚛 𝚐𝚑𝚊𝚖 𝚜𝚎 𝚋𝚊𝚌𝚑𝚊𝚢𝚎 𝚊𝚞𝚛 𝚑𝚊𝚛 𝚔𝚑𝚞𝚜𝚑𝚒 𝚝𝚞𝚖𝚑𝚊𝚛𝚎 𝚚𝚊𝚍𝚊𝚖 𝚌𝚑𝚞𝚖𝚎 𝙼𝚎𝚛𝚊 𝚋𝚊𝚌𝚑𝚠𝚊𝚊 𝙼𝚎𝚛𝚒 𝚜𝚑𝚞𝚗𝚒 𝚉𝙰𝙽𝙸 𝙸 𝚕𝚘𝚟𝚎 𝚢𝚘𝚞 𝚜𝚘 𝚖𝚞𝚌𝚑 👥💋💗 𝙼𝚎𝚛𝚒 𝚌𝚑𝚘𝚝𝚒 𝚐𝚞𝚕𝚞 𝚖𝚞𝚕𝚞 𝚉𝙰𝙽𝙸 𝚖𝚎 𝚚𝚞𝚛𝚋𝚊𝚗 𝚓𝚊𝚞 𝚝𝚞𝚖𝚙𝚎 𝚊𝚙𝚗𝚒 𝚔𝚑𝚞𝚜𝚑𝚒𝚢𝚊𝚗 𝚋𝚑𝚒 𝚖𝚎 𝚝𝚞𝚖𝚙𝚎 𝚠𝚊𝚛 𝚍𝚞 𝙼𝚎𝚛𝚒 🥹🙈🤭 𝚝𝚑𝚊𝚗𝚔 𝚢𝚘𝚞 𝚉𝙰𝙽𝙸 𝚑𝚊𝚛 𝚌𝚑𝚎𝚣 𝚖𝚎 𝙼𝚎𝚛𝚊 𝚜𝚊𝚝𝚑 𝙳𝚎𝚗𝚎 𝚔𝚎 𝚕𝚒𝚢𝚎 𝚖𝚞𝚓𝚑𝚎 𝚜𝚙𝚘𝚛𝚝 𝚔𝚊𝚛𝚗𝚎 𝚔𝚎 𝚕𝚒𝚢𝚎 💋💗 𝚝𝚞𝚖 𝚑𝚘 𝚝𝚘 𝚜𝚊𝚋𝚔𝚞𝚌𝚑 𝚑𝚊𝚒 𝚖𝚎𝚛𝚎 𝚙𝚊𝚜 𝚝𝚞𝚖𝚑𝚊𝚛𝚎 𝚋𝚊𝚐𝚎𝚛 𝚢𝚎 𝚍𝚞𝚗𝚒𝚢𝚊 𝚊𝚍𝚑𝚞𝚛𝚒 𝚑𝚊𝚒 𝙸 𝚕𝚘𝚟𝚎 𝚢𝚘𝚞 𝚜𝚘𝚘 𝚖𝚞𝚌𝚑𝚑𝚑 ❤️🫂🥹 𝚞𝚖𝚖𝚖𝚖𝚑𝚑 𝚋𝚊𝚋𝚢𝚢 𝚉𝙰𝙽𝙸 𝙷𝙰𝙿𝙿𝚈 18𝚝𝚑 𝙱𝙸𝚁𝚃𝙷𝙳𝙰𝚈 💋💋💋 𝚎𝚝𝚗𝚊 𝚣𝚒𝚢𝚊𝚍𝚊 𝚙𝚒𝚢𝚊𝚛 𝚔𝚊𝚛𝚝𝚊 𝚑𝚞 𝚖𝚎 𝚝𝚞𝚖 𝚜𝚢 𝙼𝚎𝚛𝚒 𝚙𝚒𝚢𝚊𝚛𝚒 𝚜𝚎 𝙽𝚊𝚗𝚒 𝚜𝚒 𝚜𝚑𝚎𝚑𝚣𝚊𝚍𝚒 𝚉𝙰𝙽𝙸 𝙼𝚢 𝚠𝚘𝚛𝚕𝚍💍🌎🌸🎂_</p>
+<p>𝐙𝐀𝐍𝐈'𝐬 𝐒ᴍɪʟᴇ 🥺💗 — 𝐙𝐀𝐍𝐈 𝐭𝐮𝐦 𝐦𝐞𝐫𝐢 𝐚𝐚𝐝𝐚𝐭 𝐛𝐡𝐢 𝐡𝐨... 𝐀𝐮𝐫 𝐦𝐞𝐫𝐢 𝐬𝐚𝐛𝐬𝐞 𝐤𝐡𝐨𝐛𝐬𝐮𝐫𝐚𝐭 𝐦𝐨𝐡𝐚𝐛𝐚𝐭 𝐛𝐡𝐢...🫀🌍</p>
+<p>𝐈 𝐂ʜᴏ𝐬ᴇ 𝐙𝐀𝐍𝐈, 🅔︎ᵛᵉʳʸ ᵈᵃʸ, ᵉᵛᵉʳʸ ᵐᵒᵐᵉⁿᵗ, ʷⁱᵗʰᵒᵘᵗ ᵃⁿʸ ᵈᵒᵘᵇᵗ......♡💍♾️</p>
+<p>_𝐙𝐀𝐍𝐈 𝐬𝐞 𝐛𝐚𝐚𝐭 𝐤𝐢𝐲𝐞 𝐛𝐢𝐧𝐚..._ 𝐌𝐞𝐫𝐚 𝐝𝐢𝐧 𝐤𝐚𝐛𝐡𝐢 𝐦𝐮𝐤𝐚𝐦𝐦𝐚𝐥 𝐧𝐚𝐡𝐢 𝐡𝐨𝐭𝐚...🥹🫶🏻</p>
+<p>𝐙𝐀𝐍𝐈 𝐀ʀ𝐞 🅜︎ʸ ᵖᵉᵃᶜᵉ, ᵐʸ ˢᵃᶠᵉ ᵖˡᵃᶜᵉ, ᵐʸ ʰᵃᵖⁱⁿᵉˢˢ......♡🌈🤍</p>
+<p>_𝐌𝐞𝐫𝐢 𝐡𝐚𝐫 𝐝𝐮𝐚 𝐦𝐞𝐢𝐧..._ 𝐒𝐚𝐛𝐬𝐞 𝐩𝐞𝐡𝐥𝐚 𝐧𝐚𝐦 𝐙𝐀𝐍𝐈 𝐤𝐚 𝐡𝐨𝐭𝐚 𝐡𝐚𝐢...🤲🏻🌷</p>
+<p>𝐅ᴏʀᴇᴠᴇʀ 𝐌ʏ 𝐅ᵃᵛᵒʳⁱᵗᵉ 𝐙𝐀𝐍𝐈, 🅐︎ⁿᵈ ᶠᵒʳᵉᵛᵉʳ ᵐʸ ᵇᵉˢᵗⁱᵉ......♡💋🧸</p>
+<p>_𝐉𝐨 𝐬𝐮𝐤𝐨𝐧 𝐦𝐮𝐣𝐡𝐞 𝐙𝐀𝐍𝐈 𝐦𝐞𝐢𝐧 𝐦𝐢𝐥𝐭𝐚 𝐡𝐚𝐢..._ 𝐖𝐨 𝐤𝐚𝐡𝐢𝐧 𝐚𝐮𝐫 𝐤𝐚𝐛𝐡𝐢 𝐧𝐚𝐡𝐢 𝐦𝐢𝐥𝐚...🌸🫀</p>
+<p>𝐍ᴏ 𝐎ɴᴇ 🅒︎ᵃⁿ ʳᵉᵖˡᵃᶜᵉ 𝐙𝐀𝐍𝐈 ⁱⁿ ᵐʸ ˡⁱᶠᵉ......♡🌍💖</p>
+<p style="text-align:center">♡𝐅𝐨𝐫𝐞𝐯𝐞𝐫......𝐁𝐞𝐬𝐭𝐢𝐞......𝐙𝐀𝐍𝐈......♡</p>
+<p style="text-align:center">✩̣𝐁𝐨𝐲𝐟𝐫𝐢𝐞𝐧𝐝 𝐁𝐢𝐫𝐭𝐡𝐝𝐚𝐲 𝐖𝐢𝐬𝐡 𝐅𝐨𝐫 𝐙𝐀𝐍𝐈 - 𝟏𝟖 𝐘𝐞𝐚𝐫𝐬 𝐎𝐥𝐝 💋💍🎂🌎</p>
+<p style="text-align:center">_⁸ 𝗕𝗶𝗹𝗶𝗼𝗻 𝗣𝗲𝗼𝗽𝗹𝗲 𝗜𝗻 𝗧𝗵𝗶𝘀 𝗪𝗼𝗿𝗹𝗱 𝗕𝘂𝘁 𝗢𝗻𝗹𝘆 𝗢𝗻𝗲 𝗭𝗔𝗡𝗜 𝗪𝗵𝗼𝘀𝗲 18𝘁𝗵 𝗕𝗶𝗿𝘁𝗵𝗱𝗮𝘆 𝗜𝘀 𝗢𝗻 09 𝗦𝗲𝗽𝘁𝗲𝗺𝗯𝗲𝗿🌎🥹🎀_</p>
+</div></div><button class="btn" data-go="s9">Continue to Memories 💌</button></section>
+
+<section class="scene" id="s9"><img class="character sway rise" src="assets/character.png" alt="Character"><div class="caption">Now… let's visit some memories.</div><button class="btn" data-go="s10">Enter Memories ✨</button></section>
+
+<section class="scene" id="s10">
+<div class="stars"></div><div class="tip">Drag / swipe — memories are revolving around you ♡</div>
+<div class="world" id="world"><div class="orbit" id="orbit">
+<div class="mcard" data-title="Sweetheart"><img src="assets/memory-01.png" alt="Sweetheart"><span>Sweetheart</span></div>
+<div class="mcard" data-title="Together"><img src="assets/memory-02.png" alt="Together"><span>Together</span></div>
+<div class="mcard" data-title="Forever"><img src="assets/memory-03.png" alt="Forever"><span>Forever</span></div>
+<div class="mcard" data-title="Cutie"><img src="assets/memory-04.png" alt="Cutie"><span>Cutie</span></div>
+<div class="mcard" data-title="Love"><img src="assets/memory-05.png" alt="Love"><span>Love</span></div>
+<div class="mcard" data-title="Us"><img src="assets/memory-06.png" alt="Us"><span>Us</span></div>
+<div class="mcard" data-title="Memories"><img src="assets/memory-07.png" alt="Memories"><span>Memories</span></div>
+<div class="mcard" data-title="Smile"><img src="assets/memory-08.png" alt="Smile"><span>Smile</span></div>
+<div class="mcard" data-title="Always"><img src="assets/memory-09.png" alt="Always"><span>Always</span></div>
+<div class="mcard" data-title="My World"><img src="assets/memory-10.png" alt="My World"><span>My World</span></div>
+<div class="mcard" data-title="Janu"><img src="assets/memory-11.png" alt="Janu"><span>Janu</span></div>
+<div class="mcard" data-title="Darling"><img src="assets/memory-12.png" alt="Darling"><span>Darling</span></div>
+<div class="mcard" data-title="Bestie"><img src="assets/memory-13.png" alt="Bestie"><span>Bestie</span></div>
+<div class="mcard" data-title="Moon"><img src="assets/memory-14.png" alt="Moon"><span>Moon</span></div>
+<div class="mcard" data-title="Soul"><img src="assets/memory-15.png" alt="Soul"><span>Soul</span></div>
+<div class="mcard" data-title="Happiness"><img src="assets/memory-16.png" alt="Happiness"><span>Happiness</span></div>
+<div class="mcard" data-title="Sunshine"><img src="assets/memory-17.png" alt="Sunshine"><span>Sunshine</span></div>
+<div class="mcard" data-title="Magic"><img src="assets/memory-18.png" alt="Magic"><span>Magic</span></div>
+<div class="mcard" data-title="Favorite"><img src="assets/memory-19.png" alt="Favorite"><span>Favorite</span></div>
+<div class="mcard" data-title="Forever Us"><img src="assets/memory-20.png" alt="Forever Us"><span>Forever Us</span></div>
+<div class="mcard" data-title="Beautiful"><img src="assets/memory-21.png" alt="Beautiful"><span>Beautiful</span></div>
+<div class="mcard" data-title="Precious"><img src="assets/memory-22.png" alt="Precious"><span>Precious</span></div>
+<div class="mcard" data-title="My Peace"><img src="assets/memory-23.png" alt="My Peace"><span>My Peace</span></div>
+<div class="mcard" data-title="My Person"><img src="assets/memory-24.png" alt="My Person"><span>My Person</span></div>
+<div class="mcard" data-title="ZANI ♡"><img src="assets/memory-25.png" alt="ZANI ♡"><span>ZANI ♡</span></div>
+</div></div>
+<div class="modal" id="modal"><div class="detail"><img id="detailImg" src="" alt="Memory detail"><h3 id="detailTitle"></h3><button id="close">↩ Back to memories</button></div></div>
+</section>
+
+<section class="scene" id="s11"><img class="finalPhoto" src="assets/memory-09.png" alt="Memory"><div class="caption" style="color:#fff">One memory at a time. ♡</div><button class="btn" data-go="s10">Back to Memories</button></section>
+
+<section class="scene" id="s12"><div class="outro"><h1>Happy Birthday ♡</h1><div class="handle">@code_with_bunty</div></div><button class="btn" data-go="s1">Replay</button></section>
+</main>
+
+<script>
+const PASS="1234";
+let pin="";
+const scenes=document.querySelectorAll(".scene");
+let timers=[];
+
+function clearTimers(){timers.forEach(clearTimeout);timers=[]}
+function go(id){
+ clearTimers();
+ scenes.forEach(s=>s.classList.toggle("on",s.id===id));
+ if(id==="s2"){ resetFlowers(); }
+ if(id==="s4"){ timers.push(setTimeout(()=>go("s5"),2200)); }
+ if(id==="s10"){ rx=0; ry=0; autoSpin=0; requestAnimationFrame(()=>{positionGalaxy();applyGalaxy();}); }
+}
+
+function dots(){document.querySelectorAll("#dots i").forEach((d,i)=>d.classList.toggle("on",i<pin.length))}
+function check(){
+ if(pin===PASS) go("s2");
+ else{err.textContent="Wrong passcode 💗";setTimeout(()=>err.textContent="",900);pin="";dots()}
+}
+document.querySelectorAll(".keys button").forEach(b=>b.onclick=e=>{
+ e.preventDefault();
+ const v=b.textContent.trim();
+ if(v==="⌫")pin=pin.slice(0,-1);
+ else if(v!=="*"&&pin.length<4)pin+=v;
+ dots();
+ if(pin.length===4)setTimeout(check,120);
+});
+document.addEventListener("keydown",e=>{
+ if(!s1.classList.contains("on"))return;
+ if(/^\d$/.test(e.key)&&pin.length<4)pin+=e.key;
+ if(e.key==="Backspace")pin=pin.slice(0,-1);
+ dots();
+ if(pin.length===4)setTimeout(check,120);
+});
+document.querySelectorAll("[data-go]").forEach(b=>b.onclick=e=>{
+ e.preventDefault();go(b.dataset.go)
+});
+
+const flowerBurst=document.getElementById("flowerBurst");
+const numPetal=120;
+const numEmoji=90;
+const emojis=['🌸','🌺','🌼'];
+
+function resetFlowers(){
+ flowerBurst.innerHTML="";
+ const maxR=Math.hypot(innerWidth,innerHeight)*1.05;
+ for(let i=0;i<numPetal;i++){
+   const f=document.createElement("div");
+   f.className="burst-flower";
+   for(let j=0;j<6;j++)f.appendChild(document.createElement("span"));
+   f.appendChild(document.createElement("b"));
+   const a=i/numPetal*Math.PI*2+(Math.random()-.5)*.6;
+   const r=60+Math.random()*maxR;
+   const s=.3+Math.random()*.85;
+   const rdeg=(Math.random()-.5)*400;
+   const fx=(Math.random()-.5)*2;
+   const fy=(Math.random()-.5)*2;
+   const floatDur=3+Math.random()*3;
+   f.style.setProperty("--x",Math.cos(a)*r+"px");
+   f.style.setProperty("--y",Math.sin(a)*r+"px");
+   f.style.setProperty("--s",s);
+   f.style.setProperty("--r",rdeg+"deg");
+   f.style.setProperty("--fx",fx);
+   f.style.setProperty("--fy",fy);
+   f.style.animationDelay=(Math.random()*.8)+"s, "+(2.2+Math.random()*.6)+"s";
+   f.style.animationDuration="2.2s, "+floatDur+"s";
+   flowerBurst.appendChild(f);
+ }
+ for(let i=0;i<numEmoji;i++){
+   const f=document.createElement("div");
+   f.className="burst-emoji";
+   f.textContent=emojis[i%emojis.length];
+   const a=Math.random()*Math.PI*2;
+   const r=40+Math.random()*maxR;
+   const size=38+Math.random()*42;
+   const s=.5+Math.random()*.7;
+   const rdeg=(Math.random()-.5)*360;
+   const fx=(Math.random()-.5)*2;
+   const fy=(Math.random()-.5)*2;
+   const floatDur=3+Math.random()*3.5;
+   f.style.fontSize=size+"px";
+   f.style.setProperty("--x",Math.cos(a)*r+"px");
+   f.style.setProperty("--y",Math.sin(a)*r+"px");
+   f.style.setProperty("--s",s);
+   f.style.setProperty("--r",rdeg+"deg");
+   f.style.setProperty("--fx",fx);
+   f.style.setProperty("--fy",fy);
+   f.style.animationDelay=(Math.random()*.8)+"s, "+(2.2+Math.random()*.6)+"s";
+   f.style.animationDuration="2.2s, "+floatDur+"s";
+   flowerBurst.appendChild(f);
+ }
+}
+resetFlowers();
+
+let down=null,cut=false;
+const zone=document.getElementById("cakeZone"),slash=document.getElementById("slash"),cakeHint=document.getElementById("cakeHint");
+zone.addEventListener("pointerdown",e=>{
+ zone.setPointerCapture(e.pointerId);down={x:e.clientX,y:e.clientY}
+});
+zone.addEventListener("pointermove",e=>{
+ if(!down||cut)return;
+ if(Math.hypot(e.clientX-down.x,e.clientY-down.y)>110){
+   cut=true;slash.classList.add("cut");cakeHint.textContent="Cake cut! 🎂";
+   timers.push(setTimeout(()=>go("s6"),650));
+ }
+});
+zone.addEventListener("pointerup",()=>down=null);
+zone.addEventListener("pointercancel",()=>down=null);
+
+document.getElementById("env").onclick=()=>go("s8");
+
+let dragging=false,px=0,py=0,rx=0,ry=0,autoSpin=0,lastT=performance.now();
+const orbit=document.getElementById("orbit"),world=document.getElementById("world"),cards=[...document.querySelectorAll(".mcard")];
+
+function positionGalaxy(){
+ const W=innerWidth,H=innerHeight;
+ const mobile=W<=480,tablet=W<=768;
+ const radiusX=mobile?Math.min(W*.55,220):tablet?Math.min(W*.48,380):Math.min(W*.45,580);
+ const radiusY=mobile?Math.min(H*.36,280):tablet?Math.min(H*.38,340):Math.min(H*.40,430);
+ const depth=mobile?Math.min(W*.16,80):Math.min(W*.22,190);
+ cards.forEach((card,i)=>{
+   const a=i/cards.length*Math.PI*2;
+   const x=Math.sin(a)*radiusX;
+   const y=Math.cos(a*1.3)*radiusY*.7;
+   const z=Math.cos(a)*depth+Math.sin(a*2)*depth*.4;
+   const scale=.6+(z+depth*1.3)/(depth*2.6)*.48;
+   const tilt=Math.sin(a)*10;
+   card.style.transform=`translate(-50%,-50%) translate3d(${x}px,${y}px,${z}px) rotate(${tilt}deg) scale(${scale})`;
+   card.style.zIndex=Math.round(1000+z);
+ });
+}
+function applyGalaxy(){ orbit.style.transform=`rotateX(${rx}deg) rotateY(${ry+autoSpin}deg)`; positionGalaxy(); }
+function animateGalaxy(t){ const dt=Math.min(40,t-lastT); lastT=t; if(s10.classList.contains("on")&&!dragging)autoSpin+=dt*.018; applyGalaxy(); requestAnimationFrame(animateGalaxy); }
+requestAnimationFrame(animateGalaxy);
+
+world.addEventListener("pointerdown",e=>{
+ if(e.target.closest(".mcard"))return;
+ dragging=true;px=e.clientX;py=e.clientY;
+ world.setPointerCapture(e.pointerId);
+});
+world.addEventListener("pointermove",e=>{
+ if(!dragging)return;
+ ry+=(e.clientX-px)*.30;
+ rx-=(e.clientY-py)*.18;
+ px=e.clientX;py=e.clientY;
+});
+world.addEventListener("pointerup",()=>dragging=false);
+world.addEventListener("pointercancel",()=>dragging=false);
+window.addEventListener("resize",()=>{if(s10.classList.contains("on"))positionGalaxy()});
+
+const modal=document.getElementById("modal"),detailImg=document.getElementById("detailImg"),detailTitle=document.getElementById("detailTitle");
+cards.forEach(c=>c.onclick=e=>{
+ e.stopPropagation();
+ detailImg.src=c.querySelector("img").src;
+ detailTitle.textContent=c.dataset.title;
+ modal.classList.add("show");
+});
+document.getElementById("close").onclick=()=>modal.classList.remove("show");
+modal.onclick=e=>{if(e.target===modal)modal.classList.remove("show")};
+</script>
+</body>
+</html>
