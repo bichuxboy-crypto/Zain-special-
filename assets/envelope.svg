@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="Pink envelope with a love heart">
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff7fb"/><stop offset="1" stop-color="#f5c8da"/></linearGradient>
+ <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffd7e7"/><stop offset="1" stop-color="#df6f9f"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffeeb0"/><stop offset="1" stop-color="#e3a84f"/></linearGradient>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#7c456044"/></filter>
+</defs><rect width="800" height="1000" rx="50" fill="url(#bg)"/><rect x="125" y="300" width="550" height="370" rx="28" fill="#fffdfa" stroke="#d8759e" stroke-width="12" filter="url(#shadow)"/><path d="M135 330L400 535L665 330" fill="#ffe0ec" stroke="#d8759e" stroke-width="12" stroke-linejoin="round"/><path d="M135 640L315 470M665 640L485 470" fill="none" stroke="#e7a0b9" stroke-width="10"/><circle cx="400" cy="520" r="48" fill="#ed7fac"/><path d="M400 547C350 510 373 475 400 500C427 475 450 510 400 547Z" fill="#fff"/><text x="400" y="790" text-anchor="middle" font-family="Georgia" font-size="34" fill="#8b4d67">a little letter for you</text></svg>

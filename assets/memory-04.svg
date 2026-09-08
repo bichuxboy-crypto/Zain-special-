@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="Cutie memory card">
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff7fb"/><stop offset="1" stop-color="#f5c8da"/></linearGradient>
+ <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffd7e7"/><stop offset="1" stop-color="#df6f9f"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffeeb0"/><stop offset="1" stop-color="#e3a84f"/></linearGradient>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#7c456044"/></filter>
+</defs><rect width="800" height="1000" rx="34" fill="#d9c7ee"/><circle cx="105" cy="120" r="70" fill="#fff" opacity=".23"/><circle cx="690" cy="820" r="120" fill="#fff" opacity=".18"/><path d="M0 760Q180 660 380 770T800 720V1000H0Z" fill="#fff" opacity=".28"/><path d="M90 210Q400 80 710 210" fill="none" stroke="#fff" stroke-width="9" opacity=".4"/>
+<rect x="125" y="175" width="550" height="610" rx="30" fill="#fff" opacity=".85" filter="url(#shadow)"/><circle cx="400" cy="430" r="145" fill="#9e78ba" opacity=".2"/><text x="400" y="500" text-anchor="middle" font-family="Georgia" font-size="170" fill="#9e78ba">✿</text><text x="400" y="665" text-anchor="middle" font-family="Georgia" font-size="48" font-weight="bold" fill="#3b2633">Cutie</text><text x="400" y="715" text-anchor="middle" font-family="system-ui" font-size="24" fill="#6b4052">soft flowers</text><path d="M260 745Q400 780 540 745" fill="none" stroke="#9e78ba" stroke-width="7" stroke-linecap="round" opacity=".7"/></svg>
